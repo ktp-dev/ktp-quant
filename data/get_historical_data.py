@@ -8,5 +8,6 @@ for ticker in df['Tickers']:
     ticker_df = yf.download(ticker, start="2015-01-02").iloc[::-1]
     ticker_df.drop('Adj Close', axis=1)
     ticker_df['Change'] = ticker_df['Close'] - ticker_df['Open']
-    ticker_df['% Return'] = ticker_df['Change'] / ticker_df['Close'] * 100
-    ticker_df.to_csv('{}.csv'.format(ticker))
+    ticker_df['% Return'] = ticker_df['Change'] / ticker_df['Open'] * 100
+    ticker_df.to_csv('historical_data/{}.csv'.format(ticker))
+    
