@@ -15,6 +15,7 @@ class Account:
     	    secret,
     	    endpoint
         )
+        self.account = self.api.get_account()
     
     def get_account_data(self):
         # Check if our account is restricted from trading.
@@ -52,18 +53,6 @@ class Account:
             return order.status
         except:
             return 'Order failed :('
-
-# def get_account_data():
-# 	# First, open the API connection
-#     api = tradeapi.REST(
-#     	'sample_API_key',
-#     	'sample_API_key',
-#     	'https://paper-api.alpaca.markets'
-#     )
-
-#     # Get account info
-#     account = api.get_account()
-
     
 
 if __name__ == '__main__':
