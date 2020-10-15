@@ -19,9 +19,6 @@ def get_account_data():
     equity = float(account.equity)
     #print(f'Today\'s portfolio balance: ${equity}')
 
-    # Check our current balance vs. our balance at the last market close
-    balance_change = float(account.equity) - float(account.last_equity)
-    #print(f'Today\'s portfolio balance change: ${balance_change}')
 
     # Check our current balance
     buying_power = float(account.buying_power)
