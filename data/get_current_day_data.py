@@ -15,11 +15,14 @@ def get_current_day(ticker):
     df = old_df.append(ticker_df).iloc[::-1].drop_duplicates()
     df.to_csv('historical_data/{}.csv'.format(ticker), index=False)
 
+
 def get_current_day_all_tickers():
-    f = open("supported_tickers.txt", "r")
-    for x in f:
-        get_current_day(x)
+    df = pd.read_csv('supported_tickers.txt', header=None)
+    df.columns = ['Tickers']
+
+    for ticker in df['Tickers']:
+        get_current_day(ticker)
+    
 
 if __name__ == '__main__':
     get_current_day_all_tickers()
-    
