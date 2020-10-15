@@ -8,6 +8,13 @@ class Account:
     	    endpoint
         )
         self.account = self.api.get_account()
+
+    def trade_api_call(self, apikey, secret, endpoint) :
+        self.api = tradeapi.REST(
+    	    apikey,
+    	    secret,
+    	    endpoint
+        )
     
     def get_account_data(self):
         # Check if our account is restricted from trading.
