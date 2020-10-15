@@ -1,46 +1,75 @@
 import alpaca_trade_api as tradeapi
 
-def get_account_data():
-	# First, open the API connection
-    api = tradeapi.REST(
-    	'sample_API_key',
-    	'sample_API_key',
-    	'https://paper-api.alpaca.markets'
-    )
+class Account:
+    def __init__ (self, apikey, secret, endpoint) :
+        self.api = tradeapi.REST(
+    	    apikey,
+    	    secret,
+    	    endpoint
+        )
+        self.account = self.api.get_account()
+    
+    def get_account_data(self):
+        # Check if our account is restricted from trading.
+        if self.account.trading_blocked:
+    	    print('Account is currently restricted from trading.')
 
-    # Get account info
-    account = api.get_account()
+        # Check our current balance
+        equity = float(self.account.equity)
+        #print(f'Today\'s portfolio balance: ${equity}')
 
-    # Check if our account is restricted from trading.
-    if account.trading_blocked:
-    	print('Account is currently restricted from trading.')
+        # Check our current balance
+        buying_power = float(self.account.buying_power)
+        #print(f'Today\'s portfolio buying power: ${buying_power}')
 
-    # Check our current balance
-    equity = float(account.equity)
-    #print(f'Today\'s portfolio balance: ${equity}')
+        # Get a list of all of our positions.
+        portfolio = self.api.list_positions()
+        portfolio_dict = {}
 
+        # Current positions
+        for position in portfolio:
+            #print("{} shares of {}".format(position.qty, position.symbol))
+            portfolio_dict[position.symbol] = position.qty
 
-    # Check our current balance
-    buying_power = float(account.buying_power)
-    #print(f'Today\'s portfolio buying power: ${buying_power}')
+        return {'current_equity': equity, 'current_buying_power': buying_power, 'current_portfolio': portfolio_dict}
+    
+    def place_order(self, symbol, qty, side):
+        try :
+            order = self.api.submit_order(
+                symbol=symbol,
+                qty=qty,
+                side=side,
+                type='market',
+                time_in_force='gtc'
+            )
+            return order.status
+        except:
+            return 'Order failed :('
 
-    # Get a list of all of our positions.
-    portfolio = api.list_positions()
-    portfolio_dict = {}
+# def get_account_data():
+# 	# First, open the API connection
+#     api = tradeapi.REST(
+#     	'sample_API_key',
+#     	'sample_API_key',
+#     	'https://paper-api.alpaca.markets'
+#     )
 
-    # Current positions
-    for position in portfolio:
-        #print("{} shares of {}".format(position.qty, position.symbol))
-        portfolio_dict[position.symbol] = position.qty
+#     # Get account info
+#     account = api.get_account()
 
-    return {'current_equity': equity, 'current_buying_power': buying_power, 'current_portfolio': portfolio_dict}
+    
 
 if __name__ == '__main__':
     """
     With the Alpaca API, you can check on your daily profit or loss by
     comparing your current balance to yesterday's balance.
     """
-    get_account_data()
+    account1 = Account('PKWF08ICZ03US484CPSY','k6cdNDXVzslHxjXeRW1dKLuP3QzaiytVgdrstOFq','https://paper-api.alpaca.markets')
+    print(account1.get_account_data())
+    print(account1.place_order('AAPL', 1, 'buy'))
+    print(account1.place_order('APL', 1, 'buy'))
+    
+    
 
     
 
