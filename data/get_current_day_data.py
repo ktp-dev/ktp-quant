@@ -13,7 +13,7 @@ def get_current_day(ticker):
     #append to previous historical data
     old_df = pd.read_csv('/home/ec2-user/ktp-quant/data/historical_data/{}.csv'.format(ticker)).iloc[::-1]
     df = old_df.append(ticker_df).iloc[::-1].drop_duplicates()
-    df.to_csv('historical_data/{}.csv'.format(ticker), index=False)
+    df.to_csv('/home/ec2-user/ktp-quant/data/historical_data/{}.csv'.format(ticker), index=False)
 
 
 def get_current_day_all_tickers():
