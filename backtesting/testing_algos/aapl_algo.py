@@ -1,4 +1,5 @@
 from algorithm_template import Algorithm
+import math
 
 class AAPLAlgo(Algorithm):
 	def __init__(self, place_order, get_data):
@@ -10,8 +11,7 @@ class AAPLAlgo(Algorithm):
 		self.get_data = get_data
 
 	def handler(self):
-		new_tick = get_new_data()
-
+		new_tick = self.get_new_data()
 		self.sliding_prices.append(new_tick)
 		del self.sliding_prices[0]
 
@@ -34,9 +34,8 @@ class AAPLAlgo(Algorithm):
 			self.holding_period = 2
 
 	def get_new_data(self):
-		tickers = ["AAPL"]
-		data = ["close"] #open, close, high, low, volume, change, return 
-		self.get_data(tickers, data)
+		 
+		return self.get_data(["AAPL"], ["Close"])
 
 if __name__ == "__main__":
 	new_instance = AAPLAlgo()	
