@@ -41,6 +41,52 @@ class Account:
 
         return {'current_equity': equity, 'current_buying_power': buying_power, 'current_portfolio': portfolio_dict}
     
+    def get_day_portfolio_value(self):
+        # Check if our account is restricted from trading.
+        if self.account.trading_blocked:
+    	    print('Account is currently restricted from trading.')
+
+        # get portfolio information for one day, collected every hour
+        entity = self.api.get_portfolio_history(period='1D', timeframe='1H')
+
+        equity_dict = entity['equity']
+        return equity_dict
+
+    def get_week_portfolio_value(self):
+        # Check if our account is restricted from trading.
+        if self.account.trading_blocked:
+    	    print('Account is currently restricted from trading.')
+
+        # get portfolio information for one week, collected every day
+        entity = self.api.get_portfolio_history(period='1W', timeframe='1D')
+
+        equity_dict = entity['equity']
+        return equity_dict
+
+    def get_month_portfolio_value(self):
+        # Check if our account is restricted from trading.
+        if self.account.trading_blocked:
+    	    print('Account is currently restricted from trading.')
+
+        # get portfolio information for one month, collected every day
+        entity = self.api.get_portfolio_history(period='1M', timeframe='1D')
+
+        equity_dict = entity['equity']
+        return equity_dict
+
+    def get_current_portfolio_value(self):
+        # Check if our account is restricted from trading.
+        if self.account.trading_blocked:
+    	    print('Account is currently restricted from trading.')
+
+        # get current portfolio information
+        entity = get_account_data()
+        
+        portfolio_dict = entity['current_portfolio']
+        equity = entity['current_equity']
+
+        return {equity, portfolio_dict}
+
     def place_order(self, symbol, qty, side):
         try :
             order = self.api.submit_order(
