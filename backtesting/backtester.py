@@ -2,7 +2,7 @@ import sys
 sys.path.append("testing_algos")
 import pandas as pd 
 import matplotlib.pyplot as plt
-
+from statistics_calc import *
 ####
 from aapl_algo import AAPLAlgo
 
@@ -14,9 +14,9 @@ class Backtester():
 		self.current_price = {"cash": 1.0}
 		self.algo = AAPLAlgo(self.place_order, self.get_data)
 
-		self.data_backup = self.load_data(["AAPL"], ["Close"])
 		self.data = self.load_data(["AAPL"], ["Close"])
-		print(self.data)
+		self.data_queue = self.load_data(["AAPL"], ["Close"])
+
 
 	def calculate_portfolio_value(self):
 		portfolio_value = 0.0
@@ -25,8 +25,8 @@ class Backtester():
 		return portfolio_value
 
 	def get_data(self, tickers, data):
-		self.current_price["AAPL"] = self.data[0]
-		return self.data.pop(0)
+		self.current_price["AAPL"] = self.data_queue[0]
+		return self.data_queue.pop(0)
 
 
 	def load_data(self, tickers, data):
@@ -57,10 +57,17 @@ class Backtester():
 			#iterate through everyday
 			self.algo.handler()
 			newest_value = self.calculate_portfolio_value()
-			print(newest_value)
 			portfolio_values.append(newest_value)
-		plt.plot(portfolio_values)
-		plt.show()
+		er_aapl, std_aapl = calculate_statistics(portfolio_values, prices = True)
+		er_stock, std_stock = calculate_statistics(self.data, prices = True)
+
+		
+
+
+		print("strategy return: " + str(er_aapl))
+		print("strategy std: " + str(std_aapl))
+		print("stock return: " + str(er_stock))
+		print("stock std:" + str(std_stock))
 		return portfolio_values
 if __name__ == "__main__":
 	backtester = Backtester()
