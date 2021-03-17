@@ -96,9 +96,15 @@ class Account:
                 type='market',
                 time_in_force='gtc'
             )
-            return order.status
+            print(order.status)
         except:
             return 'Order failed :('
+
+    def get_last_price(self, ticker):
+        barset = self.api.get_barset(ticker, 'day', limit = 2)[ticker]
+        close = barset[-1].c
+        return close
+
     
 
 if __name__ == '__main__':
